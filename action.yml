@@ -1,0 +1,54 @@
+name: 'WP.org Plugin Readme Linter'
+description: 'Lint WordPress.org plugin readme.txt files for WordPress.org Plugin Directory standards'
+author: 'YMMV LLC'
+branding:
+  icon: 'check-circle'
+  color: 'blue'
+
+inputs:
+  path:
+    description: 'Path to readme.txt file'
+    required: false
+    default: 'readme.txt'
+  format:
+    description: 'Output format (annotations, sarif, json)'
+    required: false
+    default: 'annotations'
+  fail-on:
+    description: 'Fail on issue level (error, warning, info)'
+    required: false
+    default: 'error'
+  config:
+    description: 'Path to configuration file'
+    required: false
+    default: '.wporg-readme-lint.json'
+  output:
+    description: 'Output file path for SARIF/JSON'
+    required: false
+    default: ''
+  upload-sarif:
+    description: 'Automatically upload SARIF to GitHub Code Scanning (requires format=sarif)'
+    required: false
+    default: 'false'
+
+outputs:
+  sarif-file:
+    description: 'Path to generated SARIF file (if format=sarif)'
+    value: ${{ steps.lint.outputs.sarif-file }}
+  violations-count:
+    description: 'Total number of violations found'
+    value: ${{ steps.lint.outputs.violations-count }}
+  failed:
+    description: 'Whether the linter failed based on fail-on level'
+    value: ${{ steps.lint.outputs.failed }}
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.path }}
+    - ${{ inputs.format }}
+    - ${{ inputs.fail-on }}
+    - ${{ inputs.config }}
+    - ${{ inputs.output }}
+    - ${{ inputs.upload-sarif }}

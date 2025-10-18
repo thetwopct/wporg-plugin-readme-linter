@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+// Find autoloader
+$autoloadPaths = [
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/../../../autoload.php',
+];
+
+foreach ($autoloadPaths as $autoloadPath) {
+    if (file_exists($autoloadPath)) {
+        require $autoloadPath;
+        break;
+    }
+}
+
+use Symfony\Component\Console\Application;
+use WPOrg\Plugin\ReadmeLinter\Console\LintCommand;
+
+$application = new Application('wporg-plugin-readme-linter', '1.0.0');
+$application->add(new LintCommand());
+$application->setDefaultCommand('lint', true);
+$application->run();

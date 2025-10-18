@@ -1,0 +1,12 @@
+{
+  "readmePath": "readme.txt",
+  "failOn": "warning",
+  "ignoreRules": ["donate-link"],
+  "requiredSections": [
+    "description",
+    "installation",
+    "faq",
+    "changelog"
+  ],
+  "allowTrunk": true
+}

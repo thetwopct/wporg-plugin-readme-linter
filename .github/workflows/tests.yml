@@ -1,0 +1,101 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        php-version: ['8.1', '8.2', '8.3', '8.4']
+      fail-fast: false
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+      
+      - name: Validate composer.json
+        run: composer validate --strict
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+      
+      - name: Run tests
+        run: vendor/bin/phpunit
+      
+      - name: Run static analysis
+        run: vendor/bin/phpstan analyse
+        if: matrix.php-version == '8.2'
+      
+      - name: Check code style
+        run: vendor/bin/phpcs
+        if: matrix.php-version == '8.2'
+
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+      
+      - name: Test CLI with valid readme
+        run: ./bin/wporg-plugin-readme-linter tests/fixtures/valid-readme.txt
+      
+      - name: Test CLI with invalid readme (should fail)
+        run: |
+          ./bin/wporg-plugin-readme-linter tests/fixtures/invalid-readme.txt || exit_code=$?
+          if [ $exit_code -eq 1 ]; then
+            echo "CLI correctly failed on invalid readme"
+            exit 0
+          else
+            echo "CLI did not fail as expected"
+            exit 1
+          fi
+      
+      - name: Test JSON output
+        run: |
+          ./bin/wporg-plugin-readme-linter tests/fixtures/invalid-readme.txt --format=json --output=output.json || true
+          cat output.json
+          test -f output.json
+      
+      - name: Test SARIF output
+        run: |
+          ./bin/wporg-plugin-readme-linter tests/fixtures/invalid-readme.txt --format=sarif --output=output.sarif || true
+          cat output.sarif
+          test -f output.sarif
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      
+      - name: Build Docker image
+        run: docker build -t wporg-readme-linter:test .
+      
+      - name: Test Docker image
+        run: |
+          docker run -v $(pwd):/workspace -e GITHUB_WORKSPACE=/workspace -e GITHUB_OUTPUT=/dev/null wporg-readme-linter:test tests/fixtures/valid-readme.txt annotations error .wporg-readme-lint.json "" false

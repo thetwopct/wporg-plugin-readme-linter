@@ -1,0 +1,11 @@
+{
+  "readmePath": "readme.txt",
+  "failOn": "error",
+  "ignoreRules": [],
+  "requiredSections": [
+    "description",
+    "installation",
+    "changelog"
+  ],
+  "allowTrunk": false
+}

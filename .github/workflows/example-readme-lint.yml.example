@@ -1,0 +1,53 @@
+name: Lint Plugin Readme
+
+on:
+  pull_request:
+    paths:
+      - 'readme.txt'
+      - '.wporg-readme-lint.json'
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint readme.txt
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Lint readme.txt
+        uses: thetwopct/wporg-plugin-readme-linter@v1
+        with:
+          path: readme.txt
+          fail-on: error
+
+  # Optional: Upload SARIF for Code Scanning
+  lint-with-sarif:
+    name: Lint with SARIF
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Lint readme.txt
+        id: lint
+        uses: thetwopct/wporg-plugin-readme-linter@v1
+        with:
+          path: readme.txt
+          format: sarif
+          output: readme-lint.sarif
+        continue-on-error: true
+      
+      - name: Upload SARIF to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: readme-lint.sarif
+          category: wporg-readme-lint

@@ -1,0 +1,53 @@
+{
+    "name": "thetwopct/wporg-plugin-readme-linter",
+    "description": "WordPress.org plugin readme.txt linter that produces GitHub annotations and SARIF output",
+    "type": "library",
+    "license": "MIT",
+    "keywords": ["wordpress", "plugin", "readme", "linter", "wporg", "validation"],
+    "authors": [
+        {
+            "name": "YMMV LLC",
+            "homepage": "https://ymmv.co/"
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "afragen/wordpress-plugin-readme-parser": "^1.2",
+        "symfony/console": "^6.0|^7.0",
+        "symfony/yaml": "^6.0|^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10 || ^2.0",
+        "squizlabs/php_codesniffer": "^3.7 || ^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WPOrg\\Plugin\\ReadmeLinter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WPOrg\\Plugin\\ReadmeLinter\\Tests\\": "tests/"
+        }
+    },
+    "bin": [
+        "bin/wporg-plugin-readme-linter"
+    ],
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:unit": "phpunit --testsuite=Unit",
+        "test:integration": "phpunit --testsuite=Integration",
+        "analyse": "phpstan analyse",
+        "cs:check": "phpcs",
+        "cs:fix": "phpcbf"
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
