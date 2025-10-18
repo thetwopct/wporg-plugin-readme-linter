@@ -1,6 +1,6 @@
 {
     "name": "thetwopct/wporg-plugin-readme-linter",
-    "description": "WordPress.org plugin readme.txt linter that produces GitHub annotations and SARIF output",
+    "description": "WordPress.org readme.txt validator",
     "type": "library",
     "license": "MIT",
     "keywords": ["wordpress", "plugin", "readme", "linter", "wporg", "validation"],
