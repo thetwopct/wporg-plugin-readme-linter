@@ -61,7 +61,7 @@ Enhancement suggestions are welcome! Please:
 
 ### Requirements
 
-- PHP 8.0 or higher
+- PHP 7.4 or higher
 - Composer
 - Git
 
@@ -162,9 +162,9 @@ class MyNewRule extends AbstractRule
     public function check(array $parsedData, string $rawContent): array
     {
         $issues = [];
-        
+
         // Your validation logic here
-        
+
         return $issues;
     }
 }
