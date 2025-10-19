@@ -32,7 +32,6 @@ class DefaultTextRule extends AbstractRule
 
         // Changelog patterns
         '/List versions from most recent at top/i',
-        '/Initial release/i',
 
         // Contributors patterns
         '/yourname/i',
@@ -190,7 +189,6 @@ class DefaultTextRule extends AbstractRule
             ],
             'changelog' => [
                 'List versions from most recent',
-                'Initial release',
             ],
         ];
 

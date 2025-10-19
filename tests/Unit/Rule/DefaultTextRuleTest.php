@@ -109,4 +109,23 @@ class DefaultTextRuleTest extends TestCase
 
         $this->assertCount(0, $issues);
     }
+
+    public function testInitialReleaseInChangelogIsAllowed(): void
+    {
+        $rule = new DefaultTextRule();
+        $parsedData = [
+            'name' => 'My Plugin',
+            'sections' => [
+                'Changelog' => "= 1.0 (2025-11-01) =\n* Initial release",
+            ],
+        ];
+        $rawContent = "=== My Plugin ===\n\n== Changelog ==\n\n= 1.0 (2025-11-01) =\n* Initial release\n";
+
+        $issues = $rule->check($parsedData, $rawContent);
+
+        // Should not flag "Initial release" as default text
+        foreach ($issues as $issue) {
+            $this->assertStringNotContainsString('Initial release', $issue->getMessage());
+        }
+    }
 }

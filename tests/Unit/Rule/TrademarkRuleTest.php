@@ -88,4 +88,38 @@ class TrademarkRuleTest extends TestCase
         $this->assertEquals(Issue::LEVEL_INFO, $issues[0]->getLevel());
         $this->assertStringContainsString('Potential trademark usage', $issues[0]->getMessage());
     }
+
+    public function testWordPressInInstallationInstructions(): void
+    {
+        $rule = new TrademarkRule();
+        $parsedData = [
+            'sections' => [
+                'Installation' => 'Upload the plugin files to your WordPress installation directory.',
+            ],
+        ];
+        $rawContent = "== Installation ==\nUpload the plugin files to your WordPress installation directory.\n";
+
+        $issues = $rule->check($parsedData, $rawContent);
+
+        // Should not flag WordPress when used in legitimate installation instructions
+        $this->assertCount(0, $issues);
+    }
+
+    public function testWordPressInVariousAllowedContexts(): void
+    {
+        $rule = new TrademarkRule();
+        $parsedData = [
+            'sections' => [
+                'Installation' => 'Go to your WordPress admin dashboard and install the plugin.',
+                'Description' => 'This plugin works with WordPress sites and integrates with WordPress core.',
+            ],
+        ];
+        $rawContent = "== Installation ==\nGo to your WordPress admin dashboard and install the plugin.\n" .
+            "== Description ==\nThis plugin works with WordPress sites and integrates with WordPress core.\n";
+
+        $issues = $rule->check($parsedData, $rawContent);
+
+        // Should not flag legitimate descriptive usage
+        $this->assertCount(0, $issues);
+    }
 }

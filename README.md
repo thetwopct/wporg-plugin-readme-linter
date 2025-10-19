@@ -48,7 +48,7 @@ or you could add something like the below to your existing workflow action:
 
 ```yaml
     - name: Lint readme.txt
-      uses: thetwopct/wporg-plugin-readme-linter@main
+      uses: thetwopct/wporg-plugin-readme-linter@v1
       with:
         path: readme.txt
         fail-on: error
