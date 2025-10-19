@@ -76,4 +76,60 @@ class LicenseRuleTest extends TestCase
 
         unlink($pluginFile);
     }
+
+    public function testLicenseFormatEquivalence(): void
+    {
+        // Create a temporary plugin file with SPDX license format
+        $pluginFile = tempnam(sys_get_temp_dir(), 'plugin');
+        file_put_contents($pluginFile, "<?php\n/*\n * Plugin Name: Test Plugin\n * License: GPL-2.0-or-later\n */");
+
+        $rule = new LicenseRule($pluginFile);
+        $parsedData = [
+            'name' => 'Test Plugin',
+            'license' => 'GPLv2 or later', // WordPress.org format
+        ];
+        $rawContent = "=== Test Plugin ===\nLicense: GPLv2 or later\n";
+
+        $issues = $rule->check($parsedData, $rawContent);
+
+        // Should not report mismatch since formats are equivalent
+        $this->assertCount(0, $issues);
+
+        unlink($pluginFile);
+    }
+
+    public function testVariousLicenseFormatEquivalences(): void
+    {
+        $equivalentPairs = [
+            ['GPLv2', 'GPL-2.0'],
+            ['GPLv2+', 'GPL-2.0+'],
+            ['GPLv2+', 'GPL-2.0-or-later'],
+            ['GPL2+', 'GPLv2 or later'],
+            ['GPLv3', 'GPL-3.0'],
+            ['GPLv3+', 'GPL-3.0-or-later'],
+            ['Apache 2.0', 'Apache-2.0'],
+            ['LGPL2.1', 'LGPL-2.1'],
+            ['LGPL3', 'LGPL-3.0'],
+        ];
+
+        foreach ($equivalentPairs as [$readmeFormat, $pluginFormat]) {
+            // Create a temporary plugin file
+            $pluginFile = tempnam(sys_get_temp_dir(), 'plugin');
+            file_put_contents($pluginFile, "<?php\n/*\n * Plugin Name: Test Plugin\n * License: {$pluginFormat}\n */");
+
+            $rule = new LicenseRule($pluginFile);
+            $parsedData = [
+                'name' => 'Test Plugin',
+                'license' => $readmeFormat,
+            ];
+            $rawContent = "=== Test Plugin ===\nLicense: {$readmeFormat}\n";
+
+            $issues = $rule->check($parsedData, $rawContent);
+
+            // Should not report mismatch for equivalent formats
+            $this->assertCount(0, $issues, "Failed for pair: {$readmeFormat} vs {$pluginFormat}");
+
+            unlink($pluginFile);
+        }
+    }
 }

@@ -117,9 +117,49 @@ class LicenseRule extends AbstractRule
         return strtolower(trim($normalized));
     }
 
+    /**
+     * Convert different license format representations to a canonical form for comparison
+     */
+    private function canonicalizeLicense(string $license): string
+    {
+        $normalized = $this->normalizeLicense($license);
+
+        // Map of equivalent license formats to canonical forms
+        $equivalencies = [
+            // GPL v2 variants
+            'gpl-2.0' => 'gplv2',
+            'gpl2' => 'gplv2',
+
+            // GPL v2+ variants
+            'gpl-2.0-or-later' => 'gplv2+',
+            'gpl-2.0+' => 'gplv2+',
+            'gpl2+' => 'gplv2+',
+            'gplv2 or later' => 'gplv2+',
+
+            // GPL v3 variants
+            'gpl-3.0' => 'gplv3',
+            'gpl3' => 'gplv3',
+
+            // GPL v3+ variants
+            'gpl-3.0-or-later' => 'gplv3+',
+            'gpl-3.0+' => 'gplv3+',
+            'gpl3+' => 'gplv3+',
+            'gplv3 or later' => 'gplv3+',
+
+            // Apache variants
+            'apache-2.0' => 'apache 2.0',
+
+            // LGPL variants
+            'lgpl-2.1' => 'lgpl2.1',
+            'lgpl-3.0' => 'lgpl3',
+        ];
+
+        return $equivalencies[$normalized] ?? $normalized;
+    }
+
     private function licensesMatch(string $readmeLicense, string $pluginLicense): bool
     {
-        return $this->normalizeLicense($readmeLicense) === $this->normalizeLicense($pluginLicense);
+        return $this->canonicalizeLicense($readmeLicense) === $this->canonicalizeLicense($pluginLicense);
     }
 
     private function extractPluginLicense(string $pluginFilePath): ?string
