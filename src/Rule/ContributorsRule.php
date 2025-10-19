@@ -130,7 +130,10 @@ class ContributorsRule extends AbstractRule
             if (!$this->isValidContributorFormat($contributor)) {
                 $issues[] = $this->createIssue(
                     Issue::LEVEL_WARNING,
-                    sprintf('Invalid contributor format: "%s". Contributors should be WordPress.org usernames.', $contributor),
+                    sprintf(
+                        'Invalid contributor format: "%s". Contributors should be WordPress.org usernames.',
+                        $contributor
+                    ),
                     $line
                 );
             }

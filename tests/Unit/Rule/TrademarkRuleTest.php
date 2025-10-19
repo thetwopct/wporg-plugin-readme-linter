@@ -51,7 +51,8 @@ class TrademarkRuleTest extends TestCase
                 'Description' => 'This plugin integrates with WordPress to provide analytics.',
             ],
         ];
-        $rawContent = "=== Analytics for WordPress ===\n== Description ==\nThis plugin integrates with WordPress to provide analytics.\n";
+        $rawContent = "=== Analytics for WordPress ===\n== Description ==\n" .
+            "This plugin integrates with WordPress to provide analytics.\n";
 
         $issues = $rule->check($parsedData, $rawContent);
 

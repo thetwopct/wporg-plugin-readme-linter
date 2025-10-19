@@ -89,7 +89,10 @@ class DonateLinkRule extends AbstractRule
         if ($this->hasInvalidDonatePattern($donateLink)) {
             $issues[] = $this->createIssue(
                 Issue::LEVEL_ERROR,
-                sprintf('Invalid donate link: "%s". Donate links should point to legitimate donation pages.', $donateLink),
+                sprintf(
+                    'Invalid donate link: "%s". Donate links should point to legitimate donation pages.',
+                    $donateLink
+                ),
                 $line
             );
         }

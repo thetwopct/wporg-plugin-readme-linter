@@ -65,7 +65,10 @@ class PluginNameRule extends AbstractRule
             $line = $this->findLineNumber($rawContent, $pluginName);
             $issues[] = $this->createIssue(
                 Issue::LEVEL_ERROR,
-                sprintf('Invalid plugin name: "%s". Plugin names should not contain WordPress trademarks or be generic.', $pluginName),
+                sprintf(
+                    'Invalid plugin name: "%s". Plugin names should not contain WordPress trademarks or be generic.',
+                    $pluginName
+                ),
                 $line
             );
         }

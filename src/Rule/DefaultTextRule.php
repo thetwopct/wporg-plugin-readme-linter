@@ -152,7 +152,8 @@ class DefaultTextRule extends AbstractRule
         if (isset($defaultIndicators[$field])) {
             foreach ($defaultIndicators[$field] as $defaultValue) {
                 if (stripos($value, $defaultValue) !== false) {
-                    $line = $this->findLineNumber($rawContent, is_string($parsedData[$field]) ? $parsedData[$field] : $value);
+                    $searchText = is_string($parsedData[$field]) ? $parsedData[$field] : $value;
+                    $line = $this->findLineNumber($rawContent, $searchText);
                     $issues[] = $this->createIssue(
                         Issue::LEVEL_ERROR,
                         sprintf('Default template value in %s field: "%s"', $field, $value),
@@ -167,8 +168,12 @@ class DefaultTextRule extends AbstractRule
     /**
      * @param array<Issue> $issues
      */
-    private function checkSectionForDefaults(string $sectionName, string $content, string $rawContent, array &$issues): void
-    {
+    private function checkSectionForDefaults(
+        string $sectionName,
+        string $content,
+        string $rawContent,
+        array &$issues
+    ): void {
         $sectionDefaults = [
             'description' => [
                 'This is the long description',
@@ -196,7 +201,11 @@ class DefaultTextRule extends AbstractRule
                     $line = $this->findLineNumber($rawContent, "== {$sectionName} ==");
                     $issues[] = $this->createIssue(
                         Issue::LEVEL_ERROR,
-                        sprintf('Default template text in %s section: "%s"', $sectionName, $this->truncateText($defaultText, 40)),
+                        sprintf(
+                            'Default template text in %s section: "%s"',
+                            $sectionName,
+                            $this->truncateText($defaultText, 40)
+                        ),
                         $line
                     );
                     break;

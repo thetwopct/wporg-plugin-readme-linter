@@ -65,11 +65,14 @@ class TestedUpToRule extends AbstractRule
                     ),
                     $line
                 );
-            } elseif ($this->hasMinorVersionIssue($testedUpTo, $currentVersion)) { // Check for minor version issues within same major version
+            } elseif ($this->hasMinorVersionIssue($testedUpTo, $currentVersion)) {
+                // Check for minor version issues within same major version
                 $issues[] = $this->createIssue(
                     Issue::LEVEL_ERROR,
                     sprintf(
-                        'Invalid minor version in "Tested up to": "%s". When using the same major version as current (%s), use the major.minor format without patch version.',
+                        'Invalid minor version in "Tested up to": "%s". ' .
+                        'When using the same major version as current (%s), ' .
+                        'use the major.minor format without patch version.',
                         $testedUpTo,
                         $currentVersion
                     ),

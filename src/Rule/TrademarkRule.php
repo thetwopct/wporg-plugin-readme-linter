@@ -104,7 +104,8 @@ class TrademarkRule extends AbstractRule
                 $issues[] = $this->createIssue(
                     Issue::LEVEL_WARNING,
                     sprintf(
-                        'Potential trademark issue in %s: "%s" should not be used improperly. Consider using "for WordPress" or similar.',
+                        'Potential trademark issue in %s: "%s" should not be used improperly. ' .
+                        'Consider using "for WordPress" or similar.',
                         $context,
                         $trademark
                     ),

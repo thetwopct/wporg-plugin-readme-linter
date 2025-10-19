@@ -80,7 +80,10 @@ class DefaultTextRuleTest extends TestCase
         $this->assertNotEmpty($issues);
         $hasSectionIssue = false;
         foreach ($issues as $issue) {
-            if (str_contains($issue->getMessage(), 'Description') || str_contains($issue->getMessage(), 'long description')) {
+            if (
+                str_contains($issue->getMessage(), 'Description') ||
+                str_contains($issue->getMessage(), 'long description')
+            ) {
                 $hasSectionIssue = true;
                 break;
             }
@@ -98,7 +101,9 @@ class DefaultTextRuleTest extends TestCase
                 'Description' => 'This plugin does amazing things for your WordPress site.',
             ],
         ];
-        $rawContent = "=== My Awesome Plugin ===\nContributors: johndoe, janedoe\n\nCustom short description.\n\n== Description ==\nThis plugin does amazing things for your WordPress site.\n";
+        $rawContent = "=== My Awesome Plugin ===\nContributors: johndoe, janedoe\n\n" .
+            "Custom short description.\n\n== Description ==\n" .
+            "This plugin does amazing things for your WordPress site.\n";
 
         $issues = $rule->check($parsedData, $rawContent);
 
