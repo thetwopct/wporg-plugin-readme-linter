@@ -16,16 +16,22 @@ use WPOrg\Plugin\ReadmeLinter\Reporter\AnnotationsReporter;
 use WPOrg\Plugin\ReadmeLinter\Reporter\JsonReporter;
 use WPOrg\Plugin\ReadmeLinter\Reporter\SarifReporter;
 use WPOrg\Plugin\ReadmeLinter\Reporter\TextReporter;
+use WPOrg\Plugin\ReadmeLinter\Rule\ContributorsRule;
+use WPOrg\Plugin\ReadmeLinter\Rule\DefaultTextRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\DonateLinkRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\EmptySectionsRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\FileSizeRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\HeadingLevelsRule;
+use WPOrg\Plugin\ReadmeLinter\Rule\LicenseRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\PluginNameRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\RequiredFieldsRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\RequiredSectionsRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\RequiresPHPRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\ShortDescriptionRule;
 use WPOrg\Plugin\ReadmeLinter\Rule\StableTagRule;
+use WPOrg\Plugin\ReadmeLinter\Rule\TestedUpToRule;
+use WPOrg\Plugin\ReadmeLinter\Rule\TrademarkRule;
+use WPOrg\Plugin\ReadmeLinter\Rule\UpgradeNoticeRule;
 
 class LintCommand extends Command
 {
@@ -106,9 +112,12 @@ class LintCommand extends Command
             return 2;
         }
 
+        // Determine plugin file path for cross-referencing
+        $pluginFilePath = $this->findPluginFile($config->getReadmePath());
+
         // Set up linter with rules
         $linter = new Linter();
-        $linter->addRule(new PluginNameRule());
+        $linter->addRule(new PluginNameRule($pluginFilePath));
         $linter->addRule(new RequiredFieldsRule());
         $linter->addRule(new ShortDescriptionRule());
         $linter->addRule(new StableTagRule($config->isAllowTrunk()));
@@ -118,6 +127,12 @@ class LintCommand extends Command
         $linter->addRule(new HeadingLevelsRule());
         $linter->addRule(new FileSizeRule());
         $linter->addRule(new DonateLinkRule());
+        $linter->addRule(new LicenseRule($pluginFilePath));
+        $linter->addRule(new ContributorsRule());
+        $linter->addRule(new TestedUpToRule());
+        $linter->addRule(new DefaultTextRule());
+        $linter->addRule(new UpgradeNoticeRule());
+        $linter->addRule(new TrademarkRule());
 
         // Run linter
         $issues = $linter->lint($content, $config->getReadmePath());
@@ -207,5 +222,48 @@ class LintCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Find the main plugin file based on the readme location
+     */
+    private function findPluginFile(string $readmePath): ?string
+    {
+        $readmeDir = dirname($readmePath);
+
+        // Look for PHP files in the same directory as readme
+        $phpFiles = glob($readmeDir . '/*.php');
+
+        foreach ($phpFiles as $phpFile) {
+            $content = file_get_contents($phpFile);
+            if ($content === false) {
+                continue;
+            }
+
+            // Check if this file has a plugin header
+            if (preg_match('/^\s*\*\s*Plugin Name:/mi', $content)) {
+                return $phpFile;
+            }
+        }
+
+        // If no plugin file found in same directory, look for common patterns
+        $commonNames = [
+            basename($readmeDir) . '.php', // Directory name + .php
+            'index.php',
+            'plugin.php',
+            'main.php',
+        ];
+
+        foreach ($commonNames as $name) {
+            $filePath = $readmeDir . '/' . $name;
+            if (file_exists($filePath)) {
+                $content = file_get_contents($filePath);
+                if ($content !== false && preg_match('/^\s*\*\s*Plugin Name:/mi', $content)) {
+                    return $filePath;
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -1,13 +1,13 @@
-=== My Awesome Plugin ===
+=== Analytics Helper ===
 Contributors: johndoe, janedoe
-Tags: plugin, awesome, test
+Tags: analytics, tracking, stats
 Requires at least: 5.0
 Tested up to: 6.4
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://example.com/donate
+Donate link: https://paypal.com/donate/example
 
 A short description of the plugin that is under 150 characters long.
 
@@ -19,9 +19,9 @@ The description can span multiple paragraphs and include formatting.
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/my-awesome-plugin` directory.
+1. Install the plugin through the WordPress admin interface.
 2. Activate the plugin through the 'Plugins' screen in WordPress.
-3. Use the Settings->Plugin Name screen to configure the plugin.
+3. Configure the plugin through the Settings menu.
 
 == Frequently Asked Questions ==
 
@@ -41,9 +41,9 @@ Yes, it has been tested up to WordPress 6.4.
 == Changelog ==
 
 = 1.0.0 =
-* Initial release
+* First version of the plugin
 
 == Upgrade Notice ==
 
 = 1.0.0 =
-Initial release of My Awesome Plugin.
+First version of Analytics Helper plugin.

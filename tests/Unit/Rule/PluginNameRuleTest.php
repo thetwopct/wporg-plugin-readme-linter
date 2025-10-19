@@ -19,8 +19,8 @@ class PluginNameRuleTest extends TestCase
 
     public function testValidPluginName(): void
     {
-        $content = "=== My Plugin ===\n\nShort description.";
-        $parsed = ['name' => 'My Plugin'];
+        $content = "=== Analytics Helper ===\n\nShort description.";
+        $parsed = ['name' => 'Analytics Helper'];
 
         $issues = $this->rule->check($parsed, $content);
 

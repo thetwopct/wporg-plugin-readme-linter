@@ -117,10 +117,13 @@ Create a `.wporg-readme-lint.json` file in your repository root to customize the
 
 | Rule ID | Description | Level |
 |---------|-------------|-------|
-| `plugin-name` | Plugin name header must be present and properly formatted | Error |
+| `plugin-name` | Plugin name header must be present, properly formatted, and not use trademarks improperly | Error/Warning |
 | `required-fields` | Required metadata fields (Contributors, Tags, Requires at least, Tested up to, Stable tag) | Error |
 | `short-description` | Short description must be ≤150 characters | Error/Warning |
 | `stable-tag` | Stable tag must be valid semantic version (not "trunk" unless configured) | Error/Warning |
+| `license` | License field must be present, valid, and match plugin file header | Error |
+| `contributors` | Contributors must use valid usernames and not be restricted/reserved | Error/Warning |
+| `tested-up-to` | WordPress version must be current and valid | Error |
 
 ### Sections & Structure
 
@@ -135,12 +138,15 @@ Create a `.wporg-readme-lint.json` file in your repository root to customize the
 | Rule ID | Description | Level |
 |---------|-------------|-------|
 | `file-size` | Readme file size should be reasonable (≤20KB) | Warning/Info |
+| `default-text` | Detects unmodified readme template text | Error |
+| `trademark` | Detects improper use of trademarked names (WordPress, etc.) | Warning/Info |
 
-### Policy Nudges
+### WordPress.org Compliance
 
 | Rule ID | Description | Level |
 |---------|-------------|-------|
-| `donate-link` | Consider adding a donate link | Info |
+| `donate-link` | Donate link should use appropriate domains and be properly formatted | Error/Warning/Info |
+| `upgrade-notice` | Upgrade notices should be limited in number and length | Warning |
 
 ## Action Inputs
 

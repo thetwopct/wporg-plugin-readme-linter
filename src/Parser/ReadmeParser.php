@@ -32,6 +32,8 @@ class ReadmeParser
             'tested' => $parser->tested ?: '',
             'requires_php' => $parser->requires_php ?: '',
             'stable_tag' => $parser->stable_tag ?: '',
+            'license' => $parser->license ?: '',
+            'license_uri' => $parser->license_uri ?: '',
             'donate_link' => $parser->donate_link ?: '',
             'short_description' => $parser->short_description ?: '',
             'sections' => $parser->sections ?: [],
