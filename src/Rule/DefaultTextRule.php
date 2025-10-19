@@ -127,6 +127,10 @@ class DefaultTextRule extends AbstractRule
         return $issues;
     }
 
+    /**
+     * @param array<mixed> $parsedData
+     * @param array<Issue> $issues
+     */
     private function checkFieldForDefaults(array $parsedData, string $rawContent, string $field, array &$issues): void
     {
         $value = $parsedData[$field] ?? '';
@@ -160,6 +164,9 @@ class DefaultTextRule extends AbstractRule
         }
     }
 
+    /**
+     * @param array<Issue> $issues
+     */
     private function checkSectionForDefaults(string $sectionName, string $content, string $rawContent, array &$issues): void
     {
         $sectionDefaults = [

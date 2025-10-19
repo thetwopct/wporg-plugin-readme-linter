@@ -55,9 +55,7 @@ class TestedUpToRule extends AbstractRule
                     sprintf('Tested up to: %s. This version of WordPress does not exist (yet).', $testedUpTo),
                     $line
                 );
-            }
-            // Check if version is outdated
-            elseif ($this->isVersionOutdated($testedUpTo, $currentVersion)) {
+            } elseif ($this->isVersionOutdated($testedUpTo, $currentVersion)) { // Check if version is outdated
                 $issues[] = $this->createIssue(
                     Issue::LEVEL_ERROR,
                     sprintf(
@@ -67,9 +65,7 @@ class TestedUpToRule extends AbstractRule
                     ),
                     $line
                 );
-            }
-            // Check for minor version issues within same major version
-            elseif ($this->hasMinorVersionIssue($testedUpTo, $currentVersion)) {
+            } elseif ($this->hasMinorVersionIssue($testedUpTo, $currentVersion)) { // Check for minor version issues within same major version
                 $issues[] = $this->createIssue(
                     Issue::LEVEL_ERROR,
                     sprintf(
@@ -152,11 +148,14 @@ class TestedUpToRule extends AbstractRule
         return false;
     }
 
+    /**
+     * @return array{major: int, minor: int, patch: int}
+     */
     private function parseVersion(string $version): array
     {
         $parts = explode('.', $version);
         return [
-            'major' => (int) ($parts[0] ?? 0),
+            'major' => (int) $parts[0],
             'minor' => (int) ($parts[1] ?? 0),
             'patch' => (int) ($parts[2] ?? 0),
         ];

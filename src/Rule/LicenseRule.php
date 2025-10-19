@@ -110,7 +110,11 @@ class LicenseRule extends AbstractRule
 
     private function normalizeLicense(string $license): string
     {
-        return strtolower(trim(preg_replace('/\s+/', ' ', $license)));
+        $normalized = preg_replace('/\s+/', ' ', $license);
+        if ($normalized === null) {
+            $normalized = $license;
+        }
+        return strtolower(trim($normalized));
     }
 
     private function licensesMatch(string $readmeLicense, string $pluginLicense): bool

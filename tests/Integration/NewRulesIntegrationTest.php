@@ -73,8 +73,7 @@ class NewRulesIntegrationTest extends TestCase
         // Should detect restricted contributors (wordpress, admin)
         $restrictedIssues = array_filter($issues, fn($issue) =>
             str_contains($issue->getMessage(), 'Restricted contributor') &&
-            $issue->getLevel() === Issue::LEVEL_ERROR
-        );
+            $issue->getLevel() === Issue::LEVEL_ERROR);
         $this->assertNotEmpty($restrictedIssues);
     }
 

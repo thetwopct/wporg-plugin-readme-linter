@@ -234,6 +234,10 @@ class LintCommand extends Command
         // Look for PHP files in the same directory as readme
         $phpFiles = glob($readmeDir . '/*.php');
 
+        if ($phpFiles === false) {
+            return null;
+        }
+
         foreach ($phpFiles as $phpFile) {
             $content = file_get_contents($phpFile);
             if ($content === false) {

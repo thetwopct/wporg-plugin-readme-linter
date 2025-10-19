@@ -92,6 +92,9 @@ class TrademarkRule extends AbstractRule
         return $issues;
     }
 
+    /**
+     * @param array<Issue> $issues
+     */
     private function checkForTrademarkIssues(string $text, string $context, string $rawContent, array &$issues): void
     {
         // Check WordPress trademarks

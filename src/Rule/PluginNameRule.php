@@ -131,9 +131,15 @@ class PluginNameRule extends AbstractRule
     private function namesMatch(string $readmeName, string $fileName): bool
     {
         // Normalize names for comparison (remove extra whitespace, case insensitive)
-        $normalizedReadme = strtolower(preg_replace('/\s+/', ' ', trim($readmeName)));
-        $normalizedFile = strtolower(preg_replace('/\s+/', ' ', trim($fileName)));
+        $normalizedReadme = preg_replace('/\s+/', ' ', trim($readmeName));
+        if ($normalizedReadme === null) {
+            $normalizedReadme = trim($readmeName);
+        }
+        $normalizedFile = preg_replace('/\s+/', ' ', trim($fileName));
+        if ($normalizedFile === null) {
+            $normalizedFile = trim($fileName);
+        }
 
-        return $normalizedReadme === $normalizedFile;
+        return strtolower($normalizedReadme) === strtolower($normalizedFile);
     }
 }
