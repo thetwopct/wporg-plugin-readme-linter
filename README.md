@@ -1,4 +1,4 @@
-# WP.org Plugin Readme Linter
+# WordPress.org Plugin Readme Linter
 
 [![Tests](https://github.com/thetwopct/wporg-plugin-readme-linter/actions/workflows/tests.yml/badge.svg)](https://github.com/thetwopct/wporg-plugin-readme-linter/actions/workflows/tests.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
