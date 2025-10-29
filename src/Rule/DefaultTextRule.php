@@ -51,8 +51,7 @@ class DefaultTextRule extends AbstractRule
         '/\[PLACEHOLDER\]/i',
         '/Lorem ipsum/i',
 
-        // Version patterns
-        '/0\.1/i', // Very common default version
+        // Version patterns (alpha/beta pre-release indicators may suggest template)
         '/1\.0\.0-alpha/i',
 
         // URL patterns

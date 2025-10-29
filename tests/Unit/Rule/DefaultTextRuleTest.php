@@ -128,4 +128,53 @@ class DefaultTextRuleTest extends TestCase
             $this->assertStringNotContainsString('Initial release', $issue->getMessage());
         }
     }
+
+    public function testVersion001IsNotDefaultText(): void
+    {
+        $rule = new DefaultTextRule();
+        $parsedData = [
+            'name' => 'My Plugin',
+        ];
+        $rawContent = "=== My Plugin ===\nStable tag: 0.0.1\n\n== Changelog ==\n\n= 0.0.1 =\n* Initial release\n";
+
+        $issues = $rule->check($parsedData, $rawContent);
+
+        // Should not flag version 0.0.1 as default text
+        foreach ($issues as $issue) {
+            $this->assertStringNotContainsString('0.1', $issue->getMessage());
+            $this->assertStringNotContainsString('0.0.1', $issue->getMessage());
+        }
+    }
+
+    public function testVersion01IsNotDefaultText(): void
+    {
+        $rule = new DefaultTextRule();
+        $parsedData = [
+            'name' => 'My Plugin',
+        ];
+        $rawContent = "=== My Plugin ===\nStable tag: 0.1\n\n== Changelog ==\n\n= 0.1 =\n* Initial release\n";
+
+        $issues = $rule->check($parsedData, $rawContent);
+
+        // Should not flag version 0.1 as default text
+        foreach ($issues as $issue) {
+            $this->assertStringNotContainsString('0.1', $issue->getMessage());
+        }
+    }
+
+    public function testVersion100IsNotDefaultText(): void
+    {
+        $rule = new DefaultTextRule();
+        $parsedData = [
+            'name' => 'My Plugin',
+        ];
+        $rawContent = "=== My Plugin ===\nStable tag: 1.0.0\n\n== Changelog ==\n\n= 1.0.0 =\n* Initial release\n";
+
+        $issues = $rule->check($parsedData, $rawContent);
+
+        // Should not flag version 1.0.0 as default text
+        foreach ($issues as $issue) {
+            $this->assertStringNotContainsString('1.0.0', $issue->getMessage());
+        }
+    }
 }
